@@ -22,4 +22,5 @@ if __name__ == '__main__':
     parser = Mparser.parser
     text = file.read()
     ast = parser.parse(text, lexer=Mparser.scanner.lexer)
-    ast.print_tree()
+    tree = ast.print_tree()
+    print(tree)
