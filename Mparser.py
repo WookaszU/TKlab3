@@ -26,13 +26,21 @@ def p_error(p):
     else:
         print("Unexpected end of input")
 
-
+# to jest zle na dole ostatnia linijka na 100 % bo complexow nie przyjmuje
+# ma problem z ostatnia instrukcja z listy, nie uwzgldnia jej
+# niby teraz dziala, ale to jest kijowe mega i pewnie nie zadziala jak ostatnia jest complex_instr
+# moze trzeba by bylo dodac jakas klase ogolna zawierajaca INSTRUCTION i COMPLEX_INSTR
 def p_start(p):
     """start : INSTRUCTION
              | INSTRUCTION start
              | COMPLEX_INS start
              | COMPLEX_INS"""
-    p[0] = p[1]
+    if len(p) == 3:
+        p[0] = classes.PStart() if p[2] is None else p[2]
+        p[0].add_instruction(p[1])
+    else:
+        p[0] = classes.Instructions()
+        p[0].add_instruction(p[1])
 
 
 def p_instructions(p):

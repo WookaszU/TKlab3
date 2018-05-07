@@ -18,10 +18,19 @@ class TreePrinter:
     def print_tree(self, indent=0):
         raise Exception("printTree not defined in class " + self.__class__.__name__)
 
+    # to chyba niepotrzebne
+    @addToClass(classes.PStart)
+    def print_tree(self, indent=0):
+        tree = ""
+        for instruction in reversed(self.instructions):
+            tree += instruction.print_tree(indent) if instruction.print_tree(indent) is not None else ""
+
+        return tree
+
     @addToClass(classes.Instructions)
     def print_tree(self, indent=0):
         tree = ""
-        for instruction in self.instructions:
+        for instruction in reversed(self.instructions):
             tree += instruction.print_tree(indent) if instruction.print_tree(indent) is not None else ""
 
         return tree
@@ -33,6 +42,7 @@ class TreePrinter:
             tree += i.print_tree(indent) if i.print_tree(indent) is not None else ""
         return tree
 
+    # to chyba niepotrzebne
     @addToClass(classes.InstructionEnd)
     def print_tree(self, indent=0):
         return self.instruction.print_tree(indent)
@@ -75,7 +85,7 @@ class TreePrinter:
     def print_tree(self, indent=0):
         tree = ""
         tree += delimiter_char * indent + "FOR\n"
-        tree += self.range.print_tree(indent + 1) + self.instruction_block.print_tree(indent + 1)
+        tree += self.range + self.instruction_block.print_tree(indent + 1)
         return tree
 
     @addToClass(classes.WhileLoop)
@@ -99,7 +109,7 @@ class TreePrinter:
 
     @addToClass(classes.Number)
     def print_tree(self, indent=0):
-        return self.number.print_tree(indent)
+        return delimiter_char * indent + str(self.number) + "\n"
 
     @addToClass(classes.ExpressionNumber)
     def print_tree(self, indent=0):
@@ -107,13 +117,13 @@ class TreePrinter:
 
     @addToClass(classes.ExpressionVar)
     def print_tree(self, indent=0):
-        return self.id.print_tree(indent)
+        return self.id #.print_tree(indent)
 
     @addToClass(classes.ExpressionAssigment)
     def print_tree(self, indent=0):
-        tree = ""
-        tree += indent * delimiter_char + self.id + "\n"
-        tree += "=" + self.expr.print_tree(indent + 1)
+        tree = "=\n"
+        tree += (indent+1) * delimiter_char + self.id + "\n"
+        tree += self.expr.print_tree(indent + 1)
         return tree
 
     @addToClass(classes.ExpressionSum)
@@ -137,14 +147,16 @@ class TreePrinter:
 
     @addToClass(classes.MatrixInitFunction)
     def print_tree(self, indent=0):
-        return delimiter_char * indent + str(self.fun) + "\n" + str(self.args)
+        return delimiter_char * indent + str(self.fun) + "\n" + delimiter_char * (indent+1) + str(self.args) + "\n"
 
-
-    # TODO  ------------------------------------------------------
     @addToClass(classes.MatrixElementModify)
     def print_tree(self, indent=0):
-        tree = ""
-        tree += indent * delimiter_char + self.id + "\n"
+        tree = "=\n"
+        tree += delimiter_char * (indent + 1) + "REF\n"
+        tree += (indent + 2) * delimiter_char + self.id + "\n"
+        tree += (indent + 2) * delimiter_char + str(self.x) + "\n"
+        tree += (indent + 2) * delimiter_char + str(self.y) + "\n"
+        tree += (indent + 1) * delimiter_char + str(self.value) + "\n"
         return tree
 
     @addToClass(classes.Negation)
@@ -172,14 +184,14 @@ class TreePrinter:
 
     @addToClass(classes.MatrixInit)
     def print_tree(self, indent=0):
-        return self.matrix_values.print_tree(indent)
+        return delimiter_char * indent + "MATRIX\n" + self.matrix_values.print_tree(indent)
 
     @addToClass(classes.MatrixValues)
     def print_tree(self, indent=0):
         if self.rows is None:
-            return delimiter_char * indent + "row\n" + self.row.print_tree(indent + 1)
+            return delimiter_char * (indent + 1) + "VECTOR\n" + self.row.print_tree(indent + 2)
         else:
-            return delimiter_char * indent + "row\n" + self.row.print_tree(indent + 1) + self.rows.print_tree(indent)
+            return delimiter_char * (indent + 1) + "VECTOR\n" + self.row.print_tree(indent + 2) + self.rows.print_tree(indent)
 
     @addToClass(classes.Row)
     def print_tree(self, indent=0):
@@ -190,12 +202,12 @@ class TreePrinter:
 
     @addToClass(classes.RelationOperator)
     def print_tree(self, indent=0):
-        return self.relation_operator.print_tree(indent)
+        return str(self.relation_operator)
 
     @addToClass(classes.RelationExpression)
     def print_tree(self, indent=0):
         tree = ""
-        tree += indent * delimiter_char + self.relation_operator + "\n"
+        tree += indent * delimiter_char + str(self.relation_operator) + "\n"
         tree += self.left_expr.print_tree(indent + 1) + self.right_expr.print_tree(indent + 1)
         return tree
 

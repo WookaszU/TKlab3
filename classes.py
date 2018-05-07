@@ -4,6 +4,14 @@ class Node:
         return self.print_tree()
 
 
+class PStart(Node):
+    def __init__(self):
+        self.instructions = []
+
+    def add_instruction(self, instruction):
+        self.instructions.append(instruction)
+
+
 class Instructions(Node):
     def __init__(self):
         self.instructions = []
