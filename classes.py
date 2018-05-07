@@ -65,10 +65,11 @@ class ComplexInstruction(Node):
         self.complex_instruction = complex_instruction
 
 
-# TODO  range
 class ForLoop(Node):
-    def __init__(self, range, instruction_block):
-        self.range = range
+    def __init__(self, id, range_from, range_to, instruction_block):
+        self.id = id
+        self.range_from = range_from
+        self.range_to = range_to
         self.instruction_block = instruction_block
 
 

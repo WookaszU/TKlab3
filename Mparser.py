@@ -114,7 +114,7 @@ def p_for_loop(p):
                   | FOR ID '=' ID ':' INTNUM '{' INSTR_BLOCK  '}'
                   | FOR ID '=' ID ':' ID '{' INSTR_BLOCK  '}'
                   """
-    p[0] = classes.ForLoop(p[6], p[8])
+    p[0] = classes.ForLoop(p[2], p[4], p[6], p[8])
 
 
 def p_while_loop(p):
@@ -201,18 +201,18 @@ def p_matrix_transpose(p):
 
 
 def p_special_assignment(p):
-    """INSTRUCTION : ID ADDASSIGN ID
-                   | ID SUBASSIGN ID
-                   | ID MULASSIGN ID
-                   | ID DIVASSIGN ID"""
+    """INSTRUCTION : EXPRESSION ADDASSIGN EXPRESSION
+                   | EXPRESSION SUBASSIGN EXPRESSION
+                   | EXPRESSION MULASSIGN EXPRESSION
+                   | EXPRESSION DIVASSIGN EXPRESSION"""
     p[0] = classes.SpecialAssigment(p[1], p[3], p[2])
 
 
 def p_matrix_binary_operations(p):
-    """EXPRESSION : ID DOTADD ID
-                  | ID DOTSUB ID
-                  | ID DOTMUL ID
-                  | ID DOTDIV ID"""
+    """EXPRESSION : EXPRESSION DOTADD EXPRESSION
+                  | EXPRESSION DOTSUB EXPRESSION
+                  | EXPRESSION DOTMUL EXPRESSION
+                  | EXPRESSION DOTDIV EXPRESSION"""
     p[0] = classes.MatrixBinaryOperation(p[1], p[3], p[2])
 
 

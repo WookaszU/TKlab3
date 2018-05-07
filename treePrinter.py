@@ -85,7 +85,11 @@ class TreePrinter:
     def print_tree(self, indent=0):
         tree = ""
         tree += delimiter_char * indent + "FOR\n"
-        tree += self.range + self.instruction_block.print_tree(indent + 1)
+        tree += delimiter_char * (indent + 1) + self.id + "\n"
+        tree += delimiter_char * (indent + 1) + "RANGE\n"
+        tree += delimiter_char * (indent + 2) + str(self.range_from) + "\n"
+        tree += delimiter_char * (indent + 2) + str(self.range_to) + "\n"
+        tree += self.instruction_block.print_tree(indent + 1)
         return tree
 
     @addToClass(classes.WhileLoop)
@@ -97,9 +101,10 @@ class TreePrinter:
     @addToClass(classes.IfInstruction)
     def print_tree(self, indent=0):
         tree = delimiter_char * indent + "IF\n"
-        tree += self.relation_expr.print_tree(indent + 1) + self.if_instruction_block.print_tree(indent + 1)
-        tree += "" if self.else_instruction_block is None else delimiter_char * indent + "ELSE\n" + self.else_instruction_block.print_tree(
-            indent + 1)
+        tree += self.relation_expr.print_tree(indent+1)
+        tree += delimiter_char * indent + "THEN\n"
+        tree += self.if_instruction_block.print_tree(indent + 1)
+        tree += delimiter_char * indent + "ELSE\n" + self.else_instruction_block.print_tree(indent + 1)
 
         return tree
 
@@ -117,7 +122,7 @@ class TreePrinter:
 
     @addToClass(classes.ExpressionVar)
     def print_tree(self, indent=0):
-        return self.id #.print_tree(indent)
+        return delimiter_char * indent + self.id
 
     @addToClass(classes.ExpressionAssigment)
     def print_tree(self, indent=0):
@@ -163,10 +168,11 @@ class TreePrinter:
     def print_tree(self, indent=0):
         return delimiter_char * indent + "-" + "\n" + self.value.print_tree(indent + 1)
 
-    # tu zamiast op moze byc  "'"
     @addToClass(classes.MatrixTranspose)
     def print_tree(self, indent=0):
-        return delimiter_char * indent + self.op + "\n" + self.id.print_tree(indent + 1)
+        tree = delimiter_char * indent + "TRANSPOSE" + "\n"
+        tree += delimiter_char * (indent + 1) + self.id + "\n"
+        return tree
 
     @addToClass(classes.SpecialAssigment)
     def print_tree(self, indent=0):
@@ -177,9 +183,9 @@ class TreePrinter:
 
     @addToClass(classes.MatrixBinaryOperation)
     def print_tree(self, indent=0):
-        tree = ""
+        tree = "\n"
         tree += indent * delimiter_char + self.operator + "\n"
-        tree += self.left.print_tree(indent + 1) + self.right.print_tree(indent + 1)
+        tree += self.left.print_tree(indent + 1) + "\n" + self.right.print_tree(indent + 1)
         return tree
 
     @addToClass(classes.MatrixInit)
@@ -208,6 +214,7 @@ class TreePrinter:
     def print_tree(self, indent=0):
         tree = ""
         tree += indent * delimiter_char + str(self.relation_operator) + "\n"
-        tree += self.left_expr.print_tree(indent + 1) + self.right_expr.print_tree(indent + 1)
+        tree += self.left_expr.print_tree(indent + 1) + "\n"
+        tree += self.right_expr.print_tree(indent + 1)
         return tree
 
