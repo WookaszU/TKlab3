@@ -41,7 +41,6 @@ class PrintIdList(Node):
         self.single_id = single_id
 
 
-# TODO
 class JumpStatement(Node):
     def __init__(self, jump_instr):
         self.jump_instr = jump_instr
@@ -96,7 +95,6 @@ class Number(Node):
         self.number = number
 
 
-# TODO ??????????
 class ExpressionNumber(Node):
     def __init__(self, number):
         self.number = number
@@ -107,7 +105,7 @@ class ExpressionVar(Node):
         self.id = id
 
 
-class ExpressionAssigment(Node):
+class ExpressionAssignment(Node):
     def __init__(self, id, expr):
         self.id = id
         self.expr = expr
@@ -138,7 +136,6 @@ class MatrixInitFunction(Node):
         self.args = args
 
 
-# TODO ????????????????
 class MatrixElementModify(Node):
     def __init__(self, id, x, y, value):
         self.id = id
@@ -152,7 +149,6 @@ class Negation(Node):
         self.value = value
 
 
-# TODO???
 class MatrixTranspose(Node):
     def __init__(self, id, op):
         self.id = id
@@ -200,5 +196,3 @@ class RelationExpression(Node):
         self.left_expr = left_expr
         self.right_expr = right_expr
         self.relation_operator = relation_operator
-
-

@@ -26,10 +26,7 @@ def p_error(p):
     else:
         print("Unexpected end of input")
 
-# to jest zle na dole ostatnia linijka na 100 % bo complexow nie przyjmuje
-# ma problem z ostatnia instrukcja z listy, nie uwzgldnia jej
-# niby teraz dziala, ale to jest kijowe mega i pewnie nie zadziala jak ostatnia jest complex_instr
-# moze trzeba by bylo dodac jakas klase ogolna zawierajaca INSTRUCTION i COMPLEX_INSTR
+
 def p_start(p):
     """start : INSTRUCTION
              | INSTRUCTION start
@@ -51,6 +48,7 @@ def p_instructions(p):
         p[0].add_instruction(p[1])
     else:
         p[0] = classes.Instructions()
+        p[0].add_instruction(p[1])
 
 
 def p_instruction_end(p):
@@ -155,7 +153,7 @@ def p_expression_var(p):
 
 def p_expression_assignment(p):
     """INSTRUCTION : ID '=' EXPRESSION"""
-    p[0] = classes.ExpressionAssigment(p[1], p[3])
+    p[0] = classes.ExpressionAssignment(p[1], p[3])
 
 
 def p_expression_sum(p):
@@ -170,7 +168,6 @@ def p_expression_mul(p):
     p[0] = classes.ExpressionMul(p[1], p[3], p[2])
 
 
-
 def p_expression_group(p):
     """EXPRESSION : '(' EXPRESSION ')'"""
     p[0] = classes.ExpressionGroup(p[2])
@@ -183,7 +180,6 @@ def p_matrix_special_init(p):
     p[0] = classes.MatrixInitFunction(p[1], p[3])
 
 
-# TODO ???????????????? czy to jest ok?
 def p_matrix_element_modify(p):
     """INSTRUCTION : ID '[' INTNUM ',' INTNUM ']' '=' NUMBER"""
     p[0] = classes.MatrixElementModify(p[1], p[3], p[5], p[8])
@@ -194,7 +190,6 @@ def p_negation(p):
     p[0] = classes.Negation(p[2])
 
 
-# TODO  ???????? co jako 2 argument?
 def p_matrix_transpose(p):
     """EXPRESSION : ID TRANSPOSE"""
     p[0] = classes.MatrixTranspose(p[1], p[2])
@@ -260,4 +255,3 @@ def p_expression_relation(p):
 
 
 parser = yacc.yacc()
-
